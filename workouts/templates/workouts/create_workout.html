@@ -1,0 +1,13 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Начать тренировку
+{% endblock %}
+
+{% block content %}
+    <form action="{% url 'workouts:create_question' %}" method="post">
+    {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Начать тренировку">
+    </form>
+{% endblock %}

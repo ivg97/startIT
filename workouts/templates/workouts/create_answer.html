@@ -1,0 +1,13 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Ответ на вопрос{% endblock %}
+
+{% block content %}
+    {{ question.question }}
+    {{ question.answer }}
+    <form action="{% url 'workouts:create_answer' %}" method="post">
+    {% csrf_token %}
+    {{ form.rating }}
+        <input type="submit" value="Ответить">
+    </form>
+{% endblock %}
