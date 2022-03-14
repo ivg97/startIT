@@ -5,9 +5,12 @@
 {% endblock %}
 
 {% block content %}
+    Всего вопросов подготовлено - {{ all_questions }}
     <form action="{% url 'workouts:create_question' %}" method="post">
     {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Начать тренировку">
     </form>
+    <br>
+    <a href="{% url 'main:index' %}">Меню</a>
 {% endblock %}

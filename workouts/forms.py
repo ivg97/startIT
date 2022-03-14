@@ -7,7 +7,7 @@ from workouts.models import Workout, WorkoutQuestion
 class CreateWorkoutForm(forms.ModelForm):
     class Meta:
         model = Workout
-        fields = ('name',)
+        fields = ('count_questions',)
 
 
 class AnswerForm(forms.ModelForm):

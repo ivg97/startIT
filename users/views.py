@@ -23,6 +23,7 @@ class UserRegisterView(CreateView):
 
 
 
+
     # def post(self, request, *args, **kwargs):
     #     form = self.form_class(data=request.POST)
     #     if form.is_valid():

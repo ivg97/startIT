@@ -1,9 +1,13 @@
+import random
+import datetime
+
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.utils.text import slugify
 
 from startIT_utils.text import translite
 from users.models import User
+
 
 
 class Question(models.Model):
@@ -54,6 +58,21 @@ class Question(models.Model):
         if not self.slag:
             self.slag = translite(self.question)
         super(Question, self).save(*args, **kwargs)
+
+    @staticmethod
+    def get_questions(workout, workout_question, count):
+        all_questions = Question.objects.all()
+        question_in_workout = workout.workoutquestion_set.all()
+        if len(question_in_workout) <= count:
+            while True:
+                question = random.choice(all_questions)
+                if question not in question_in_workout:
+                    return question.id
+                else:
+                    continue
+        else:
+            return 0
+
 
 
 class Comment(models.Model):

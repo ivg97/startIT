@@ -1,3 +1,6 @@
+import datetime
+from collections import Counter
+
 from django.db import models
 
 from questions.models import Question
@@ -7,7 +10,13 @@ from users.models import User
 class Workout(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, name='user',
                              verbose_name='Пользователь')
-    name = models.CharField(max_length=25, name='name', verbose_name='Название')
+    questions = models.ManyToManyField(Question,
+                                       through='WorkoutQuestion',
+                                       name='questions',
+                                       verbose_name='Вопросы')
+    count_questions = models.DecimalField(decimal_places=0, max_digits=2,
+                                          default=0, name='count_questions',
+                                          verbose_name='Количество вопросов')
     data_workout = models.DateField(auto_now_add=True, name='data_workout',
                                     verbose_name='Дата тренировки')
     average_score = models.DecimalField(decimal_places=1, name='average_score',
@@ -23,6 +32,22 @@ class Workout(models.Model):
 
     def __str__(self):
         return f'{self.user} - {self.data_workout} = {self.average_score}'
+
+    @staticmethod
+    def check_workout():
+        if len(Workout.objects.filter(data_workout=datetime.date.today())) >= 1:
+            return False
+        return False
+
+    @staticmethod
+    def calculate_average_score(workout):
+        questions = WorkoutQuestion.objects.filter(workout=workout)
+        summ = sum([i.rating for i in questions])
+        count = len(questions)
+        workout.average_score = round(summ / count, 1)
+        workout.save()
+
+
 
 
 
@@ -50,3 +75,4 @@ class WorkoutQuestion(models.Model):
 
     def __str__(self):
         return f'{self.question} = {self.rating}'
+

@@ -2,7 +2,8 @@ import random
 
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView
+from django.views.generic.base import View, TemplateView
 
 from questions.models import Question
 from workouts.forms import CreateWorkoutForm, AnswerForm
@@ -16,44 +17,86 @@ class CreateWorkoutView(CreateView):
     success_url = reverse_lazy('workouts:create_question')
     redirect_url = reverse_lazy('workouts:create_answer')
 
+    def get_context_data(self, **kwargs):
+        context = super(CreateWorkoutView, self).get_context_data(**kwargs)
+        context['all_questions'] = len(Question.objects.all())
+        return context
+
     def post(self, request, *args, **kwargs):
         form = self.form_class(data=request.POST)
         if form.is_valid():
+            count_questions = form.cleaned_data.get('count_questions')
             new_form = form.save(commit=False)
             new_form.user = request.user
+            workout = new_form
+            if Workout.check_workout():
+                return redirect(reverse_lazy('workouts:today'))
+            question_id = Question.get_questions(workout, WorkoutQuestion,
+                                                 count_questions)
+            if count_questions == 0 or question_id == 0:
+                return redirect(reverse_lazy('workouts:result', kwargs={
+                    'workout_id': workout.id,
+                }))
             new_form.save()
-            return redirect(self.redirect_url)
-        return redirect(self.success_url)
+
+
+            return redirect(reverse_lazy('workouts:create_answer', kwargs={
+                'workout_id': workout.id,
+                'question_id': question_id,
+            'count': count_questions}))
+
 
 
 class AnswerView(CreateView):
     model = WorkoutQuestion
     template_name = 'workouts/create_answer.html'
     form_class = AnswerForm
-    success_url = reverse_lazy('workouts:create_answer')
-    check = []
+    # success_url = reverse_lazy('workouts:create_answer')
 
     def get_context_data(self, *args, **kwargs):
         context = super(AnswerView, self).get_context_data(*args, **kwargs)
-        questions = Question.objects.all()
-        while True:
-            id = random.randint(0, len(questions) - 1)
-            if id not in self.check:
-                self.check.append(id)
-                break
-            else:
-                if len(self.check) == len(questions):
-                    break
-                continue
-        context['question'] = questions[id]
+        context['question'] = Question.objects.get(
+            id=self.kwargs['question_id'])
+        context['workout_id'] = self.kwargs['workout_id']
+        context['count'] = self.kwargs['count']
         return context
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(data=request.POST)
         if form.is_valid():
             new_form = form.save(commit=False)
-            # new_form.workout = self.get_queryset()
-            # new_form.question = self.get_queryset()
+            print('answer', kwargs)
+            new_form.workout = Workout.objects.get(id=kwargs['workout_id'])
+            new_form.question = Question.objects.get(id=kwargs['question_id'])
             new_form.save()
+            workout = Workout.objects.get(id=kwargs['workout_id'])
+            count = kwargs['count']
+            question_id = Question.get_questions(workout, WorkoutQuestion,
+                                                 count)
+            if count == 0 or question_id == 0:
+                return redirect(reverse_lazy('workouts:result', kwargs={
+                    'workout_id': workout.id,
+                }))
+
+            return redirect(reverse_lazy('workouts:create_answer', kwargs={
+                'workout_id': kwargs['workout_id'],
+                'question_id': question_id,
+            'count': count - 1 }))
+            # return redirect(reverse_lazy('workouts:today'))
 
 
+class ListResultView(TemplateView):
+    template_name = 'workouts/result_workout.html'
+    model = Workout
+
+    def get_context_data(self, **kwargs):
+        context = super(ListResultView, self).get_context_data(**kwargs)
+        workout = Workout.objects.get(id=kwargs['workout_id'])
+        Workout.calculate_average_score(workout)
+        context['workout'] = workout
+        return context
+
+
+class TodayWorkoutView(TemplateView):
+    template_name = 'workouts/today_workout.html'
+    # model = Workout
