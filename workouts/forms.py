@@ -11,6 +11,13 @@ class CreateWorkoutForm(forms.ModelForm):
         model = Workout
         fields = ('count_questions',)
 
+    def __init__(self, *args, **kwargs):
+        super(CreateWorkoutForm, self).__init__(*args , **kwargs)
+        self.fields['count_questions'].widget.attrs['value'] = 'number'
+        self.fields['count_questions'].widget.attrs['min'] = '2'
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
     def clean_count_questions(self):
         data = self.cleaned_data['count_questions']
         if len(Question.objects.all()) < data:
