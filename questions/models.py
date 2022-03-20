@@ -1,9 +1,11 @@
 import random
 import datetime
-
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
+from django.shortcuts import render
 from django.utils.text import slugify
+from taggit.managers import TaggableManager
+from taggit.models import Tag, TagBase
 
 from startIT_utils.text import translite
 from users.models import User
@@ -26,8 +28,7 @@ class Question(models.Model):
     )
     author = models.ForeignKey(User,on_delete=models.PROTECT,
                                verbose_name='автор', name='author')
-    tag = models.ForeignKey('Tag', on_delete=models.PROTECT, name='tag',
-                            verbose_name='Теги')
+    tag = TaggableManager(verbose_name="Тег", related_name='tag')
     question = models.CharField(verbose_name='Вопрос', max_length=500,
                                 name='question')
     slag = models.SlugField(verbose_name='Слаг', max_length=500,
@@ -60,10 +61,13 @@ class Question(models.Model):
         super(Question, self).save(*args, **kwargs)
 
     @staticmethod
-    def get_questions(workout, workout_question, count):
-        all_questions = Question.objects.all()
-        question_in_workout = workout.workoutquestion_set.all()
-        if len(question_in_workout) <= count:
+    def get_questions(workout, count):
+        all_questions = Question.objects.filter(is_delete=False)
+        try:
+            question_in_workout = workout.questions.all()
+        except ValueError:
+            question_in_workout = []
+        if count > 1:
             while True:
                 question = random.choice(all_questions)
                 if question not in question_in_workout:
@@ -105,17 +109,3 @@ class Comment(models.Model):
     def __str__(self):
         return f'{self.user} + {self.text[:10]}'
 
-
-class Tag(models.Model):
-    name = models.CharField(max_length=25, verbose_name='Теги', name='name')
-    data_created = models.DateField(auto_now_add=True, name='data_created',
-                                    verbose_name='Дата создания')
-    is_delete = models.BooleanField(verbose_name='Удален', name='is_delete',
-                                    default=False)
-    class Meta:
-        db_table = 'tags'
-        verbose_name = 'Тег'
-        verbose_name_plural = 'Теги'
-
-    def __str__(self):
-        return self.name

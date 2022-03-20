@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'questions',
     'workouts',
     'main',
+    'taggit',
 
 ]
 

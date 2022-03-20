@@ -7,11 +7,16 @@
 
     {% if user.is_authenticated %}
         <h3>Привет, {{ user.first_name }}</h3>
-    <a href="{% url 'users:logout' %}">Выйти</a>
+        <a href="{% url 'users:logout' %}">Выйти</a>
+        <br>
+        <a href="{% url 'workouts:all' %}">Мои тренировки</a>
         <br>
         <a href="{% url 'workouts:create_question' %}">Тренировка</a>
         <br>
-        <a href="{% url 'questions:create_question' %}">Опубликовать вопрос</a>
+        <a href="{% url 'questions:create_question' %}">Добавить вопрос</a>
+        <br>
+        <a href="{% url 'questions:create_tag' %}">Добавить тег</a>
+
     {% else %}
     <a href="{% url 'users:login' %}">Войти</a>
         <p></p>

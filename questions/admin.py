@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from questions.models import Question, Comment, Tag
+from questions.models import Question, Comment
 
 
 @admin.register(Question)
@@ -19,7 +19,3 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 
-@admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
-    list_display = ('name', 'data_created', 'is_delete',)
-    list_display_links = ('name',)

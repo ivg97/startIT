@@ -1,0 +1,20 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Мои тренировки{% endblock %}
+
+{% block content %}
+    <a href="{% url 'main:index' %}">Меню</a>
+    {% for workout in workouts %}
+        <ul>
+            <a href="{% url 'workouts:workout_detail' workout.id %}">Тренировка № {{ workout.id }}</a>
+            <br>
+            {{ workout.data_workout }}
+            <br>
+            {{ workout.count_questions }}
+            <br>
+            {{ workout.average_score }}
+        </ul>
+        <br>
+
+    {% endfor %}
+{% endblock %}
