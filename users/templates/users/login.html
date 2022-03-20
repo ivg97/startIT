@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %} Войти {% endblock %}
+
+{% block content%}
+
+    <h2> Вход </h2>
+    {% if user.is_authenticated %}
+    <p>Вы уже выполнили вход</p>
+        <div><a href="{% url 'users:logout' %}">Выйти</a></div>
+    {% else %}
+    <form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+        <input type="submit" value="Войти">
+
+        <a href="{% url 'users:register' %}">Зарегистрироваться</a>
+
+    </form>
+    {% endif %}
+
+{% endblock %}

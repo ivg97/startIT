@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <a href="{% url 'main:index' %}">Меню</a>
+    <p>{{ object.data_workout }}</p>
+<p>{{ workout.average_score }}</p>
+    <p>Вопросы тренировки</p>
+    {% for question in workout_questions %}
+    <p>{{ question.question}}</p>
+        <p>{{ question.rating }}</p>
+        <a href="#">Посмотреть ответ</a>
+        <p>{{ question.question.answer|safe }}</p>
+        <br>
+    {% endfor %}
+
+
+
+
+
+
+{% endblock %}

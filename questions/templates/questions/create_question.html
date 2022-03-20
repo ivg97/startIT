@@ -1,0 +1,13 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Публикация вопроса{% endblock %}
+
+{% block content %}
+    <form action="" method="post">
+        <h2>Создание вопроса</h2>
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form.as_p }}
+        <input type="submit" value="Опубликовать">
+    </form>
+{% endblock %}

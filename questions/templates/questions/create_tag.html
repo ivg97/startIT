@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Создание тега{% endblock %}
+
+{% block content %}
+
+    <form action="" method="post">
+        <h2>Создание тега</h2>
+        {% csrf_token %}
+
+        {{ form.as_p }}
+        <input type="submit" value="Создать">
+    </form>
+
+{% endblock %}
