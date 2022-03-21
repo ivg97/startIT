@@ -20,6 +20,10 @@ class CreateQuestionForm(forms.ModelForm):
         self.fields['answer'].widget.attrs['placeholder'] = 'Введите ответ'
 
 
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
+
 class CreateTagForm(forms.ModelForm):
     class Meta:
         model = Tag
@@ -29,5 +33,7 @@ class CreateTagForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CreateTagForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['placeholder'] = 'Введите название'
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
 
 

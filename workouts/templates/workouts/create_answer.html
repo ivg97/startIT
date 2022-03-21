@@ -3,13 +3,30 @@
 {% block title %}Ответ на вопрос{% endblock %}
 
 {% block content %}
-    {{ question.question }}
-    <br>
-    {{ question.answer }}
-    <br>
-    <form action="{% url 'workouts:create_answer' workout_id question.id count %}" method="post">
-    {% csrf_token %}
-    {{ form.rating }}
-        <input type="submit" value="Ответить">
-    </form>
+
+    <div class="container">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+
+
+    </div>
+    <div class="container">
+        <p><b>Вопрос:</b></p>
+        <p>{{ question.question }}</p>
+        <p><b>Ответ:</b></p>
+        <p>{{ question.answer|safe }}</p>
+
+        <br>
+        <form action="{% url 'workouts:create_answer' workout_id question.id count %}" method="post">
+            {% csrf_token %}
+            <div class="md-3">
+                <vabel for="{{ form.rating.id_for_label }}" class="form_label">Оценка</vabel>
+                {{ form.rating }}
+                <div class="form-text">Мы думаем вы не достойны оценки от 0 до 2. Успехов!</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Ответить</button>
+
+        </form>
+    </div>
 {% endblock %}

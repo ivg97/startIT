@@ -12,9 +12,11 @@ class CreateWorkoutForm(forms.ModelForm):
         fields = ('count_questions',)
 
     def __init__(self, *args, **kwargs):
-        super(CreateWorkoutForm, self).__init__(*args , **kwargs)
+        super(CreateWorkoutForm, self).__init__(*args, **kwargs)
         self.fields['count_questions'].widget.attrs['value'] = 'number'
         self.fields['count_questions'].widget.attrs['min'] = '2'
+        max = str(len(Question.objects.filter(is_delete=False)))
+        self.fields['count_questions'].widget.attrs['max'] = max
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
 
@@ -37,3 +39,13 @@ class AnswerForm(forms.ModelForm):
     class Meta:
         model = WorkoutQuestion
         fields = ('rating',)
+
+    def __init__(self, *args, **kwargs):
+        super(AnswerForm, self).__init__(*args, **kwargs)
+        self.fields['rating'].widget.attrs['value'] = 'number'
+        # self.fields['rating'].widget.attrs['selected'] = '4'
+        # self.fields['rating'].widget.attrs['disabled'] = '1'
+        self.fields['rating'].widget.attrs['min'] = '2'
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+

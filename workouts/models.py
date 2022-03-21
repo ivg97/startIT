@@ -57,8 +57,7 @@ class WorkoutQuestion(models.Model):
         (4, 4),
         (3, 3),
         (2, 2),
-        (1, 1),
-        (0, 0),
+        # (0, 0),
     )
 
     workout = models.ForeignKey(Workout, on_delete=models.CASCADE,
@@ -67,7 +66,7 @@ class WorkoutQuestion(models.Model):
                                  name='question', verbose_name='Вопросы')
     rating = models.DecimalField(choices=RATING_CHOICES, max_digits=1,
                                  name='rating', verbose_name='Оценка',
-                                 decimal_places=0, default=0)
+                                 decimal_places=0, default=2)
     class Meta:
         db_table = 'workout_questions'
         verbose_name = 'Вопрос тренировки'

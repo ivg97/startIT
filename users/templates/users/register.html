@@ -7,11 +7,48 @@
 
     <h2>Регистрация</h2>
 
-    <form action="{% url 'users:register' %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-        <input type="submit" value="Создать аккаунт">
-    </form>
-    <div><a href="{% url 'users:login' %}">Уже есть аккаунт? Авторизоваться</a></div>
+
+    <div class="container">
+
+        <form action="{% url 'users:login' %}" method="post">
+            {% csrf_token %}
+            <div class="md-3">
+                <vabel for="{{ form.username.id_for_label }}" class="form_label">Имя пользователя</vabel>
+                {{ form.username }}
+                <div class="form-text"></div>
+            </div>
+            <div class="md-3">
+                <vabel for="{{ form.email.id_for_label }}" class="form_label">E-mail</vabel>
+                {{ form.email }}
+                <div class="form-text"></div>
+            </div>
+            <div class="md-3">
+                <vabel for="{{ form.first_name.id_for_label }}" class="form_label">Имя</vabel>
+                {{ form.first_name }}
+                <div class="form-text"></div>
+            </div>
+            <div class="md-3">
+                <vabel for="{{ form.last_name.id_for_label }}" class="form_label">Фамилия</vabel>
+                {{ form.last_name }}
+                <div class="form-text"></div>
+            </div>
+            <div class="md-3">
+                <vabel for="{{ form.password1.id_for_label }}" class="form_label">Пароль</vabel>
+                {{ form.password1 }}
+                <div class="form-text"></div>
+            </div>
+            <div class="md-3">
+                <vabel for="{{ form.password2.id_for_label }}" class="form_label">Повторите пароль</vabel>
+                {{ form.password2 }}
+                <div class="form-text"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Регистрация</button>
+            <a href="{% url 'users:login' %}">
+                <button type="button" class="btn btn-outline-primary">Уже есть аккаунт? Авторизоваться</button>
+            </a>
+        </form>
+    </div>
+
 
 {% endblock %}
