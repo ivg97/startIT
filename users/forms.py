@@ -12,7 +12,10 @@ class UserLoginForm(AuthenticationForm):
         super(UserLoginForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs['placeholder'] = 'Введите имя ' \
                                                               'пользователя'
-        self.fields['password'].widget.attrs['placeholder'] = 'Введите парполь'
+        self.fields['password'].widget.attrs['placeholder'] = 'Введите пароль'
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
 
 
 class RegisterUserForm(UserCreationForm):
@@ -31,3 +34,6 @@ class RegisterUserForm(UserCreationForm):
         self.fields['last_name'].widget.attrs['placeholder'] = 'Введите фамилию'
         self.fields['password1'].widget.attrs['placeholder'] = 'Введите пароль'
         self.fields['password2'].widget.attrs['placeholder'] = 'Повторите пароль'
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
