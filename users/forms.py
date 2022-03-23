@@ -35,5 +35,6 @@ class RegisterUserForm(UserCreationForm):
         self.fields['password1'].widget.attrs['placeholder'] = 'Введите пароль'
         self.fields['password2'].widget.attrs['placeholder'] = 'Повторите пароль'
 
+
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'

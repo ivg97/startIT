@@ -124,4 +124,5 @@ class DetailWorkoutView(DetailView):
         workout_questions = WorkoutQuestion.objects.filter(
             workout_id=kwargs['object'].id)
         context['workout_questions'] = workout_questions
+        context['title'] = f"Тренировка - {kwargs['object'].pk}"
         return context
