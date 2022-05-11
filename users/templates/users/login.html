@@ -12,7 +12,7 @@
             <p>Вы уже выполнили вход</p>
             <div><a href="{% url 'users:logout' %}">Выйти</a></div>
         {% else %}
-
+            <a href="{% url 'social:begin' 'vk-oauth2' %}">Войти через ВК</a>
             <form method="post">
                 {% csrf_token %}
 
